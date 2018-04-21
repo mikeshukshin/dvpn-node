@@ -1,0 +1,211 @@
+{
+  "CONTRACT_ABI": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "entityAddress",
+          "type": "address"
+        }
+      ],
+      "name": "serverAnnounced",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getServerCount",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "getServer",
+      "outputs": [
+        {
+          "name": "serverAddress",
+          "type": "address"
+        },
+        {
+          "name": "ip",
+          "type": "uint256"
+        },
+        {
+          "name": "port",
+          "type": "uint256"
+        },
+        {
+          "name": "pricePerHour",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "ip",
+          "type": "uint256"
+        },
+        {
+          "name": "port",
+          "type": "uint256"
+        },
+        {
+          "name": "pricePerHour",
+          "type": "uint256"
+        }
+      ],
+      "name": "announceServer",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "deannounceServer",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "connectionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "isConnected",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "connectionId",
+          "type": "uint256"
+        },
+        {
+          "name": "serverAddress",
+          "type": "address"
+        }
+      ],
+      "name": "startConnection",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "connectionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "stopConnection",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "CONTRACT_ADDRESS": "",
+  "CONTRACT_MANAGER_KEY": "",
+  "ETH_NODE_URL": "http://localhost:7545",
+  "VPN_SERVER_IP": "",
+  "WEB_SERVER_PORT": 3000,
+  "VPN_SERVER_PRICE": 1e13
+}

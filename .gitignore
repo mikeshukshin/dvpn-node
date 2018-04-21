@@ -1,0 +1,5 @@
+.idea
+node_modules/
+/config.json
+/vpn/client/configs/*
+/vpn/server/docker/openvpn-data
