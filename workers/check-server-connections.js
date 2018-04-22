@@ -115,7 +115,7 @@ setInterval(() => {
             try {
                 await Promise.all([p1, p2, p3])
             }catch(e){
-                console.error(x);
+                console.error(e);
             }
         }
 

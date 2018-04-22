@@ -3,11 +3,20 @@ const utils = require('./services/utils');
 const fs = require('fs');
 const { exec } = require('child_process');
 const EventEmitter = require('events');
+const BigNumber = require('bignumber.js');
 
 (async () => {
     let serverCount = await contract.getServerCount();
     let serverIndex = Math.floor(Math.random() * serverCount);
     let {serverAddress, ip, port, pricePerHour} = await contract.getServer(serverIndex);
+    pricePerHour = new BigNumber(pricePerHour);
+
+    let balanceBefore = await contract.balanceOf(contract.myAddress);
+    if(pricePerHour.dividedToIntegerBy(60).gt(balanceBefore)) {
+        await contract.deposit(pricePerHour.dividedToIntegerBy(60).minus(balanceBefore));
+    }
+    balanceBefore = await contract.balanceOf(contract.myAddress);
+    console.log(`Balance ${balanceBefore}`);
 
     ip = utils.intToIp(ip);
     let data = await utils.downloadVPNConfig(ip, port);
@@ -27,6 +36,9 @@ const EventEmitter = require('events');
     };
     let onSignal = async (signal) => {
         // console.log(`Received ${signal}`);
+
+        let balance = await contract.balanceOf(contract.myAddress);
+        console.log(`Balance ${balance} (diff: ${balance - balanceBefore})`);
 
         fs.unlinkSync(configPath);
         subprocess.kill('SIGTERM');

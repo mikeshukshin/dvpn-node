@@ -5,11 +5,16 @@ const child_process = require('child_process');
 const EventEmitter = require('events');
 let { VPN_SERVER_IP, VPN_SERVER_PRICE, WEB_SERVER_PORT } = utils.getConfig();
 
+let balanceBefore;
+
 function onExit(code){
     // console.log(`Exitting with code ${code}`);
 }
-function onSignal(signal) {
+async function onSignal(signal) {
     // console.log(`Received ${signal}`);
+
+    let balance = await contract.balanceOf(contract.myAddress);
+    console.log(`Balance ${balance} (diff: ${balance - balanceBefore})`);
 
     let eventEmitter = new EventEmitter();
 
@@ -34,6 +39,9 @@ process.on('SIGTERM', onSignal);
     }else{
         console.log('Server is already announced');
     }
+
+    balanceBefore = await contract.balanceOf(contract.myAddress);
+    console.log(`Balance ${balanceBefore}`);
 
     let checkerChild = child_process.fork('workers/check-server-connections.js');
     checkerChild.on("message", function(x){console.log(x)});

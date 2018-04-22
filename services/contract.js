@@ -8,8 +8,9 @@ let web3 = new Web3(new Web3.providers.HttpProvider(ETH_NODE_URL));
 let contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
 let manager = web3.eth.accounts.privateKeyToAccount(CONTRACT_MANAGER_KEY);
 
+let myAddress = manager.address;
 let tx = {
-    from: manager.address,
+    from: myAddress,
     gas: 2000000,
 };
 
@@ -49,6 +50,14 @@ function stopConnection(connectionId){
     return contract.methods.stopConnection(connectionId).send(tx);
 }
 
+function balanceOf(address){
+    return contract.methods.balanceOf(address).call();
+}
+
+function deposit(value){
+    return web3.eth.sendTransaction(Object.assign({}, tx, {value, to: CONTRACT_ADDRESS}));
+}
+
 module.exports = {
     announceServer,
     deannounceServer,
@@ -59,4 +68,7 @@ module.exports = {
     getConnectionInfo,
     startConnection,
     stopConnection,
+    balanceOf,
+    myAddress,
+    deposit,
 };
