@@ -31,8 +31,7 @@ function intToIp(num) {
 }
 
 function getConfig(){
-    let config = fs.readFileSync('config.json');
-    return JSON.parse(config);
+    return require('../config.js');
 }
 
 function startWebServer(port){
