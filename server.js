@@ -5,16 +5,15 @@ const child_process = require('child_process');
 const EventEmitter = require('events');
 let { VPN_SERVER_IP, VPN_SERVER_PRICE, WEB_SERVER_PORT } = utils.getConfig();
 
-let children = [];
 function onExit(code){
-    console.log(`Exitting with code ${code}`);
+    // console.log(`Exitting with code ${code}`);
 }
 function onSignal(signal) {
-    console.log(`Received ${signal}`);
+    // console.log(`Received ${signal}`);
 
     let eventEmitter = new EventEmitter();
 
-    console.log('Deannouncing server...');
+    // console.log('Deannouncing server...');
     contract.deannounceServer().then(() => {
         eventEmitter.emit('deannounceServerEvent', {something: "Bla"})
     });

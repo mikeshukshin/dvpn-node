@@ -4,11 +4,11 @@ const contract = require('../services/contract');
 const path = require('path');
 const { exec } = require('child_process');
 
-let client;
+// let client;
 
 function onExit(code){
     console.log(`Exitting with code ${code}`);
-    client.end();
+    // client.end();
 }
 process.on('exit', onExit);
 
@@ -23,13 +23,13 @@ async function checkConnections(connectionIds){
             let { startedAt, affordableTime } = await contract.getConnectionInfo(connectionId);
             let connectionTime = moment.utc().unix() - startedAt;
 
-            if(connectionTime >= affordableTime){
+            if(connectionTime >= affordableTime + 20){
                 killConnection = true;
             }
 
-            console.log(`${connectionId}: ${connectionTime}s`);
+            // console.log(`${connectionId}: ${connectionTime}s`);
         }else{
-            console.log(`${connectionId}: not connected`);
+            // console.log(`${connectionId}: not connected`);
             killConnection = true
         }
 
@@ -41,7 +41,7 @@ async function checkConnections(connectionIds){
 }
 
 setInterval(() => {
-    client = net.createConnection({ port: 7505 }, () => {
+    let client = net.createConnection({ port: 7505 }, () => {
         client.write('status 2\r\n');
     });
     client.on('data', async (data) => {
@@ -63,16 +63,15 @@ setInterval(() => {
                 let cwd = path.join(__dirname, '../vpn/server/docker');
                 let subprocess = exec(cmd, {cwd}, function (error, stdout, stderr) {
                     if (error) {
-                        console.log(stderr);
+                        // console.log(stderr);
                         reject(stderr);
                     }else{
-                        console.log(stdout);
+                        // console.log(stdout);
                         resolve(stdout);
                     }
                 });
 
                 subprocess.stdout.on('data', (chunk) => {
-                    process.stdout.write(chunk);
                     if(chunk.indexOf('Continue with revocation:') !== -1){
                         let write = () => {
                             if(!subprocess.stdin.write('yes\n')){
@@ -86,17 +85,38 @@ setInterval(() => {
 
             let p2 = new Promise((resolve, reject) => {
                 client.write(`kill ${connectionName}\r\n`, () => {
-
                     if(process.send) {
-                        process.send(`${connectionName} killed`);
+                        process.send(`Connection ${connectionName} killed`);
                     }else{
-                        console.log(`${connectionName} killed`);
+                        console.log(`Connection ${connectionName} killed`);
                     }
                     resolve()
                 });
             });
 
-            await Promise.all([p1, p2]).catch((x) => console.error(x));
+            let p3 = new Promise(async (resolve, reject) => {
+                let connectionId = connectionName.match(/(\d*)$/)[1];
+
+                if(!await contract.isConnected(connectionId)){
+                    resolve();
+                    return;
+                }
+
+                try {
+                    await contract.stopConnection(connectionId);
+                    console.log(`Connection ${connectionId} stopped`);
+                    resolve();
+                }catch(e){
+                    console.log(`Connection ${connectionId} failed to stop: ${e}`);
+                    reject();
+                }
+            });
+
+            try {
+                await Promise.all([p1, p2, p3])
+            }catch(e){
+                console.error(x);
+            }
         }
 
         client.end();

@@ -45,6 +45,10 @@ function startConnection(connectionId, serverAddress){
     return contract.methods.startConnection(connectionId, serverAddress).send(tx);
 }
 
+function stopConnection(connectionId){
+    return contract.methods.stopConnection(connectionId).send(tx);
+}
+
 module.exports = {
     announceServer,
     deannounceServer,
@@ -54,4 +58,5 @@ module.exports = {
     isConnected,
     getConnectionInfo,
     startConnection,
+    stopConnection,
 };
