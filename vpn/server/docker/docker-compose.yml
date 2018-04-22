@@ -1,9 +1,5 @@
 version: '3'
 services:
-#  web:
-#    build: .
-#    ports:
-#     - "5000:5000"
   openvpn:
     cap_add:
      - NET_ADMIN
@@ -11,6 +7,7 @@ services:
     container_name: openvpn
     ports:
      - "1194:1194/udp"
+     - "7505:7505/tcp"
     restart: always
     volumes:
      - ./openvpn-data/conf:/etc/openvpn

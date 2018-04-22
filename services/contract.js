@@ -33,6 +33,17 @@ function getServer(index){
     return contract.methods.getServer(index).call();
 }
 
+function isConnected(connectionId){
+    return contract.methods.isConnected(connectionId).call();
+}
+
+function getConnectionInfo(connectionId){
+    return contract.methods.getConnectionInfo(connectionId).call();
+}
+
+function startConnection(connectionId, serverAddress){
+    return contract.methods.startConnection(connectionId, serverAddress).send(tx);
+}
 
 module.exports = {
     announceServer,
@@ -40,4 +51,7 @@ module.exports = {
     serverAnnounced,
     getServerCount,
     getServer,
+    isConnected,
+    getConnectionInfo,
+    startConnection,
 };

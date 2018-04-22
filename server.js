@@ -1,9 +1,11 @@
 const utils = require('./services/utils');
 const contract = require('./services/contract');
 const process = require('process');
+const child_process = require('child_process');
 const EventEmitter = require('events');
 let { VPN_SERVER_IP, VPN_SERVER_PRICE, WEB_SERVER_PORT } = utils.getConfig();
 
+let children = [];
 function onExit(code){
     console.log(`Exitting with code ${code}`);
 }
@@ -33,6 +35,9 @@ process.on('SIGTERM', onSignal);
     }else{
         console.log('Server is already announced');
     }
+
+    let checkerChild = child_process.fork('workers/check-server-connections.js');
+    checkerChild.on("message", function(x){console.log(x)});
 
     utils.startWebServer(WEB_SERVER_PORT);
 })();
